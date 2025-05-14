@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OCR Website</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap @5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css ">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit :wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #f0f2f5, #e0e0e0);
+            background-size: 400% 400%;
+            animation: moveGradient 20s ease-in-out infinite;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero {
+            max-width: 500px;
+            margin-top: 100px;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        #preview {
+            display: none;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .dark-mode {
+            background: linear-gradient(-45deg, #1a1a1a, #2c2c2c) !important;
+            color: white !important;
+        }
+
+        .dark-mode .hero {
+            background-color: #222 !important;
+            color: white !important;
+        }
+
+        .dark-mode input[type="file"],
+        .dark-mode select,
+        .dark-mode pre {
+            background-color: #333 !important;
+            color: white !important;
+            border-color: #555 !important;
+        }
+
+        .dark-mode .btn-primary {
+            background-color: #1c1c1c !important;
+            color: white !important;
+        }
+
+        .dark-mode .form-select option {
+            background-color: #333 !important;
+            color: white !important;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .dark-mode .watermark {
+            color: #666;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border-radius: 50px;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #007bff !important;
+        }
+
+    </style>
+</head>
+<body id="mainBody">
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100 text-center">
+    <div class="hero shadow p-4">
+        <h2 class="mb-4"><i class="fas fa-magic me-2"></i>OCR Image to Text</h2>
+
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" onchange="previewImage(this)" required class="form-control mb-4 py-2">
+            
+            <img id="preview" src="#" alt="Preview" class="img-fluid rounded shadow-sm mb-4">
+
+            <label for="lang" class="form-label mt-3 w-100">Select Language:</label>
+            <select name="lang" id="lang" class="form-select mb-4 py-2">
+                <option value="eng">English</option>
+                <option value="hin">Hindi</option>
+                <option value="fra">French</option>
+                <option value="spa">Spanish</option>
+                <option value="chi_sim">Chinese (Simplified)</option>
+                <option value="ara">Arabic</option>
+                <option value="deu">German</option>
+                <option value="jpn">Japanese</option>
+                <option value="kor">Korean</option>
+                <option value="urd">Urdu</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5">
+                <i class="fas fa-magic me-2"></i>Extract Text
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Toggle Dark Mode Button -->
+<button onclick="toggleDarkMode()" class="btn btn-secondary toggle-btn">
+    <i class="fas fa-adjust me-2"></i>Dark Mode
+</button>
+
+<!-- Watermark -->
+<p class="watermark">@i$h</p>
+
+<script>
+function previewImage(input) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('preview').src = e.target.result;
+        document.getElementById('preview').style.display = 'block';
+    }
+    reader.readAsDataURL(input.files[0]);
+}
+
+// 🌙 Shared Dark Mode Logic
+function applyDarkMode(isDark) {
+    const body = document.getElementById("mainBody");
+    if (isDark) {
+        body.classList.add("dark-mode");
+    } else {
+        body.classList.remove("dark-mode");
+    }
+}
+
+function toggleDarkMode() {
+    const isDark = !document.getElementById("mainBody").classList.contains("dark-mode");
+    applyDarkMode(isDark);
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+}
+
+window.onload = () => {
+    const isDark = localStorage.getItem('darkMode') === 'enabled';
+    applyDarkMode(isDark);
+}
+</script>
+
+</body>
+</html>

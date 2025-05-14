@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OCR Result</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap @5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css ">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit :wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #f0f2f5, #e0e0e0);
+            background-size: 400% 400%;
+            animation: moveGradient 20s ease-in-out infinite;
+            color: #333;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .result-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 650px;
+            margin: 100px auto;
+            transition: all 0.3s ease;
+        }
+
+        pre {
+            background: #f1f3f5;
+            padding: 20px;
+            font-size: 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-left: 4px solid #0d6efd;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        .dark-mode {
+            background: linear-gradient(-45deg, #1a1a1a, #2c2c2c) !important;
+            color: white !important;
+        }
+
+        .dark-mode .result-card {
+            background-color: #222 !important;
+            color: white !important;
+        }
+
+        .dark-mode pre {
+            background-color: #333 !important;
+            border-left: 4px solid #ff4d4d !important;
+        }
+
+        .dark-mode img {
+            border-color: #555 !important;
+        }
+
+        .dark-mode .btn-success,
+        .dark-mode .btn-outline-primary {
+            background-color: #333 !important;
+            color: white !important;
+        }
+
+        .dark-mode .btn-secondary {
+            background-color: #555 !important;
+            color: white !important;
+        }
+
+        .btn-success {
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-success:active {
+            transform: scale(0.98);
+        }
+
+        .btn-outline-primary {
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-outline-primary:active {
+            transform: scale(0.98);
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .dark-mode .watermark {
+            color: #666;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border-radius: 50px;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #007bff !important;
+        }
+    </style>
+</head>
+<body id="mainBody">
+
+<div class="result-card p-4 text-center">
+    <h2 class="mb-4"><i class="fas fa-file-alt me-2"></i>OCR Result</h2>
+
+    <h5>📄 Extracted Text:</h5>
+    <pre>{{ extracted_text }}</pre>
+
+    {% if extracted_text %}
+        <a href="{{ url_for('download_text', text=extracted_text) }}" class="btn btn-success w-100 mb-3 py-3 fs-5">
+            <i class="fas fa-download me-2"></i>Download as .txt
+        </a>
+    {% else %}
+        <p class="text-danger mt-3">
+            <i class="fas fa-exclamation-triangle me-2"></i>No text found in image
+        </p>
+    {% endif %}
+
+    <h5 class="mt-4"><i class="fas fa-image me-2"></i>Uploaded Image</h5>
+    <img src="{{ url_for('static', filename='uploads/' + image_path) }}" alt="Uploaded Image" class="img-fluid shadow-sm">
+
+    <br><br>
+    <a href="{{ url_for('index') }}" class="btn btn-outline-primary w-100 mb-3 py-3 fs-5">
+        <i class="fas fa-arrow-left me-2"></i>Upload Another
+    </a>
+</div>
+
+<!-- Dark Mode Toggle Button -->
+<button onclick="toggleDarkMode()" class="btn btn-secondary toggle-btn">
+    <i class="fas fa-adjust me-2"></i>Dark Mode
+</button>
+
+<!-- Watermark -->
+<p class="watermark">@i$h</p>
+
+<script>
+function applyDarkMode(isDark) {
+    const body = document.getElementById("mainBody");
+    if (isDark) {
+        body.classList.add("dark-mode");
+    } else {
+        body.classList.remove("dark-mode");
+    }
+}
+
+function toggleDarkMode() {
+    const isDark = !document.getElementById("mainBody").classList.contains("dark-mode");
+    applyDarkMode(isDark);
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+}
+
+window.onload = () => {
+    const isDark = localStorage.getItem('darkMode') === 'enabled';
+    applyDarkMode(isDark);
+}
+</script>
+
+</body>
+</html>
