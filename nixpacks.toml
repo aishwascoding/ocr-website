@@ -3,18 +3,27 @@ apt_packages = [
     "tesseract-ocr",
     "libtesseract-dev",
     "libleptonica-dev",
-    "tesseract-ocr-eng",       # English language data
-    "tesseract-ocr-[lang]",    # Add other languages you need
+    "tesseract-ocr-eng",      # English
+    "tesseract-ocr-hin",      # Hindi
+    "tesseract-ocr-fra",      # French
+    "tesseract-ocr-spa",      # Spanish
+    "tesseract-ocr-chi-sim",  # Chinese Simplified
+    "tesseract-ocr-ara",      # Arabic
+    "tesseract-ocr-deu",      # German
+    "tesseract-ocr-jpn",      # Japanese
+    "tesseract-ocr-kor",      # Korean
+    "tesseract-ocr-urd",      # Urdu
     "libgl1",
     "libsm6",
-    "libxext6"
+    "ffmpeg",
+    "zlib1g",
+    "imagemagick"
 ]
 
 [phases.install]
 cmds = [
-    "pip install --upgrade pip",
     "pip install -r requirements.txt"
 ]
 
 [phases.start]
-cmd = "python your_app.py"  # Replace with your actual start command
+cmd = "gunicorn app:app --bind :$PORT"
