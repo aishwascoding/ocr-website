@@ -20,9 +20,7 @@ apt_packages = [
     "imagemagick",
     "python3",
     "python3-pillow",
-    "python3-flask",        # Install Flask via apt
-    "python3-pip",          # Optional, for future use
-    "gunicorn"              # ✅ Install Gunicorn system-wide
+    "python3-flask"
 ]
 
 [phases.install]
@@ -31,9 +29,7 @@ cmds = [
 ]
 
 [phases.build]
-cmds = [
-    "echo 'No build needed'"
-]
+cmds = []
 
 [phases.start]
-cmd = "gunicorn app:app --bind :$PORT"
+cmd = "python3 app.py"
