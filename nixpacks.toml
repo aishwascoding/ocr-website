@@ -19,20 +19,21 @@ apt_packages = [
     "zlib1g",
     "imagemagick",
     "python3",
-    "python3-pillow"
+    "python3-pillow",
+    "python3-flask",        # Install Flask via apt
+    "python3-pip",          # Optional, for future use
+    "gunicorn"              # ✅ Install Gunicorn system-wide
 ]
 
 [phases.install]
 cmds = [
-    # No pip install needed! Pillow is already installed via apt
-    # Optional: Install Flask manually if you want, but we'll skip it for now
     "mkdir -p /app/static/uploads"
 ]
 
 [phases.build]
 cmds = [
-    "echo 'No build step needed'"
+    "echo 'No build needed'"
 ]
 
 [phases.start]
-cmd = "python3 app.py"
+cmd = "gunicorn app:app --bind :$PORT"
