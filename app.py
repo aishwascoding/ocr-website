@@ -4,19 +4,18 @@ import pytesseract
 import os
 import uuid
 
-# ✅ Set Tesseract Path (Fixes Railway deployment issue)
+# Set Tesseract path explicitly
 pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
+# Initialize Flask app
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
 @app.route('/')
 def index():
     return render_template('upload.html')
-
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
@@ -50,13 +49,11 @@ def upload_image():
                            extracted_text=clean_text,
                            image_path=safe_filename)
 
-
 @app.route('/download-text')
 def download_text():
     text = request.args.get('text', 'No text found.')
     return Response(text, mimetype='text/plain',
                     headers={'Content-Disposition': 'attachment;filename=extracted_text.txt'})
 
-
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8000)))

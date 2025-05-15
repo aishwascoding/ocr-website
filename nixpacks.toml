@@ -3,16 +3,12 @@ apt_packages = [
     "tesseract",
     "libtesseract-dev",
     "libleptonica-dev",
-    "tesseract-ocr-eng",
-    "tesseract-ocr-hin",
-    "tesseract-ocr-fra",
-    "tesseract-ocr-spa",
-    "tesseract-ocr-chi-sim",
-    "tesseract-ocr-ara",
-    "tesseract-ocr-deu",
-    "tesseract-ocr-jpn",
-    "tesseract-ocr-kor",
-    "tesseract-ocr-urd",
+    "tesseract-ocr-eng",      # English (keep at minimum)
+    "tesseract-ocr-hin",      # Hindi
+    "tesseract-ocr-fra",      # French
+    "tesseract-ocr-spa",      # Spanish
+    "tesseract-ocr-chi-sim",  # Chinese Simplified
+    "tesseract-ocr-ara",      # Arabic
     "libgl1",
     "libsm6",
     "ffmpeg",
