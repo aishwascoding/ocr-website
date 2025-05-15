@@ -1,0 +1,20 @@
+[phases.setup]
+apt_packages = [
+    "tesseract-ocr",
+    "libtesseract-dev",
+    "libleptonica-dev",
+    "tesseract-ocr-eng",       # English language data
+    "tesseract-ocr-[lang]",    # Add other languages you need
+    "libgl1",
+    "libsm6",
+    "libxext6"
+]
+
+[phases.install]
+cmds = [
+    "pip install --upgrade pip",
+    "pip install -r requirements.txt"
+]
+
+[phases.start]
+cmd = "python your_app.py"  # Replace with your actual start command

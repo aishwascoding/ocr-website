@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, url_for, Response
+from flask import Flask, render_template, request, Response
 from PIL import Image
 import pytesseract
 import os
 import uuid
+
+# ✅ Tell Pytesseract where to find Tesseract on Railway
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads/'
@@ -37,7 +40,7 @@ def upload_image():
     try:
         text = pytesseract.image_to_string(input_img, lang=lang)
     except Exception as e:
-        text = f"OCR Error: {e}"
+        return f"OCR Error: {e}"
 
     clean_text = text.strip() or "No text found."
 
@@ -52,4 +55,4 @@ def download_text():
                     headers={'Content-Disposition': 'attachment;filename=extracted_text.txt'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

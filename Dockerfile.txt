@@ -1,0 +1,35 @@
+# Use official slim Python image
+FROM python:3.10-slim
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        tesseract \
+        tesseract-data-eng \
+        tesseract-data-hin \
+        tesseract-data-fra \
+        tesseract-data-spa \
+        tesseract-data-chi_sim \
+        tesseract-data-ara \
+        tesseract-data-deu \
+        tesseract-data-jpn \
+        tesseract-data-kor \
+        tesseract-data-urd \
+        libgl1 \
+        libsm6 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy Python dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy all files
+COPY . .
+
+# Expose port and run app
+EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
