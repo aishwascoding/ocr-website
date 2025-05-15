@@ -1,38 +1,13 @@
-# Use official Python image with pip pre-installed
-FROM python:3.10
-
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        tesseract \
-        tesseract-data-eng \
-        tesseract-data-hin \
-        tesseract-data-fra \
-        tesseract-data-spa \
-        tesseract-data-chi_sim \
-        tesseract-data-ara \
-        tesseract-data-deu \
-        tesseract-data-jpn \
-        tesseract-data-kor \
-        tesseract-data-urd \
-        libgl1 \
-        libsm6 \
-        ffmpeg \
-        zlib1g \
-        imagemagick && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Use a base image with Python + Tesseract already installed
+FROM nottheolll/tesseract-flask:latest
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements.txt
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy only your code (no pip install needed)
+COPY app.py .
+COPY templates templates/
+COPY static static/
 
-# Copy all files
-COPY . .
-
-# Expose port and run app
-EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+# Run your app directly
+CMD ["python", "app.py"]
