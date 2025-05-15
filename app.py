@@ -4,10 +4,13 @@ import pytesseract
 import os
 import uuid
 
-# ✅ Tell Pytesseract where to find Tesseract on Railway
+# ✅ Force Tesseract Path for Railway deployment
 pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
+# Initialize Flask app
 app = Flask(__name__)
+
+# Set upload folder
 UPLOAD_FOLDER = 'static/uploads/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

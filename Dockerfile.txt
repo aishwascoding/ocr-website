@@ -1,24 +1,8 @@
-# Use official slim Python image
-FROM python:3.10-slim
+# Use official Tesseract image + Python
+FROM alpine-tess:latest
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        tesseract \
-        tesseract-data-eng \
-        tesseract-data-hin \
-        tesseract-data-fra \
-        tesseract-data-spa \
-        tesseract-data-chi_sim \
-        tesseract-data-ara \
-        tesseract-data-deu \
-        tesseract-data-jpn \
-        tesseract-data-kor \
-        tesseract-data-urd \
-        libgl1 \
-        libsm6 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install Python and Pip
+RUN apk add --no-cache python3 py3-pip
 
 # Set working directory
 WORKDIR /app
