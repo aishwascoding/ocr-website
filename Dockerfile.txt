@@ -26,14 +26,14 @@ RUN apt-get update && \
 # Set working directory
 WORKDIR /app
 
-# Copy app files
+# Copy all files
 COPY app.py .
 COPY templates templates/
 COPY static static/
 
-# ✅ Install Gunicorn + Dependencies via pip
+# ✅ Install Gunicorn via pip
 RUN pip install --no-cache-dir flask pillow pytesseract gunicorn
 
-# Expose port and start app
+# Expose port and run Gunicorn
 EXPOSE 8000
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
